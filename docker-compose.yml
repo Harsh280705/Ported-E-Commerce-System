@@ -1,0 +1,81 @@
+name: portecommerce
+
+# Isolated project: own network + own persistent volume. Nothing here touches
+# other compose projects (e.g. the legacy Week-3 stack). Host port 8080
+# verified free on 2026-10-13.
+
+services:
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    restart: unless-stopped
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: ${DB_PASSWORD:?set DB_PASSWORD in .env}
+      MSSQL_PID: Developer
+    volumes:
+      - portecommerce_mssql_data:/var/opt/mssql
+    networks:
+      - portecommerce_net
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P \"$${MSSQL_SA_PASSWORD}\" -C -Q 'SELECT 1' -b -l 5 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      start_period: 40s
+      retries: 12
+
+  api:
+    build:
+      context: .
+      dockerfile: backend/Ecommerce.Api/Dockerfile
+    image: portecommerce-api:1.0
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ConnectionStrings__Default: "Server=db,1433;Database=EcommerceDb;User Id=sa;Password=${DB_PASSWORD:?set DB_PASSWORD in .env};TrustServerCertificate=True"
+      JWT_KEY: ${JWT_KEY:?set JWT_KEY in .env}
+      JWT_ISSUER: ecommerce-api
+      JWT_AUDIENCE: ecommerce-spa
+      # Explicit dev/test-data generation only (default off). Set SEED_TEST_CATALOG=true
+      # in the shell to insert the deterministic 2000-product test catalog on next api start.
+      SeedTestCatalog: ${SEED_TEST_CATALOG:-false}
+    networks:
+      - portecommerce_net
+    expose:
+      - "8080"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:8080/health/db || exit 1"]
+      interval: 15s
+      timeout: 5s
+      start_period: 120s
+      retries: 10
+
+  nginx:
+    build:
+      context: .
+      dockerfile: nginx/Dockerfile
+    image: portecommerce-nginx:1.0
+    restart: unless-stopped
+    depends_on:
+      api:
+        condition: service_healthy
+    ports:
+      - "${HOST_PORT:-8080}:80"
+    networks:
+      - portecommerce_net
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O - http://127.0.0.1/nginx-health | grep -q OK || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+
+networks:
+  portecommerce_net:
+    name: portecommerce_net
+    driver: bridge
+
+volumes:
+  portecommerce_mssql_data:
+    name: portecommerce_mssql_data

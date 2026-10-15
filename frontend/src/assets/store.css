@@ -1,0 +1,107 @@
+/* Yantra Shop design system — restrained modern retail.
+   Built on Bootstrap 5; these rules add brand, layout width, cards, and states. */
+:root {
+  --stx-brand: #16324f;
+  --stx-brand-dark: #0e2236;
+  --stx-accent: #d9820b;
+  --stx-accent-dark: #b06405;
+  --stx-bg: #f4f6f9;
+  --stx-card: #ffffff;
+  --stx-ink: #1c2733;
+  --stx-muted: #5d6b7a;
+  --stx-line: #e2e8f0;
+  --stx-radius: 12px;
+  --stx-shadow: 0 1px 2px rgba(16, 32, 54, 0.06), 0 4px 14px rgba(16, 32, 54, 0.07);
+  --stx-shadow-hover: 0 2px 4px rgba(16, 32, 54, 0.08), 0 10px 26px rgba(16, 32, 54, 0.13);
+}
+
+html, body { background: var(--stx-bg); color: var(--stx-ink); }
+body { font-family: "Segoe UI", system-ui, -apple-system, Roboto, "Helvetica Neue", Arial, sans-serif; }
+
+/* ---- Full-viewport shell (replaces narrow .container) ---- */
+.stx-shell { width: 100%; max-width: 1720px; margin: 0 auto; padding-left: clamp(12px, 2.5vw, 40px); padding-right: clamp(12px, 2.5vw, 40px); }
+
+/* ---- Header ---- */
+.stx-topbar { background: var(--stx-brand-dark); color: #cfe0f1; font-size: 0.8rem; }
+.stx-header { background: var(--stx-brand); color: #fff; position: sticky; top: 0; z-index: 1030; box-shadow: 0 2px 10px rgba(0,0,0,.18); }
+.stx-brand { color: #fff; font-weight: 700; font-size: 1.35rem; letter-spacing: .2px; text-decoration: none; }
+.stx-brand:hover { color: #ffd98a; }
+.stx-search { max-width: 560px; }
+.stx-search .form-control { border-radius: 999px 0 0 999px; border: 0; }
+.stx-search .btn { border-radius: 0 999px 999px 0; background: var(--stx-accent); border-color: var(--stx-accent); color: #fff; font-weight: 600; }
+.stx-search .btn:hover { background: var(--stx-accent-dark); border-color: var(--stx-accent-dark); }
+.stx-catnav { background: var(--stx-brand-dark); }
+.stx-catnav a { color: #d7e4f2; text-decoration: none; font-size: .9rem; padding: .45rem .8rem; border-radius: 999px; white-space: nowrap; }
+.stx-catnav a:hover, .stx-catnav a.active { background: rgba(255,255,255,.14); color: #fff; }
+.stx-cartbtn { position: relative; }
+.stx-count { position: absolute; top: -8px; right: -8px; }
+
+/* ---- Hero ---- */
+.stx-hero { background: linear-gradient(120deg, var(--stx-brand-dark) 0%, var(--stx-brand) 60%, #1e4a73 100%); color: #fff; border-radius: var(--stx-radius); }
+.stx-hero h1 { font-weight: 700; }
+.stx-hero .btn-accent { background: var(--stx-accent); border-color: var(--stx-accent); color: #fff; font-weight: 600; }
+.stx-hero .btn-accent:hover { background: var(--stx-accent-dark); border-color: var(--stx-accent-dark); color: #fff; }
+.stx-stat { background: rgba(255,255,255,.1); border-radius: 10px; }
+
+/* ---- Category cards ---- */
+.stx-catcard { background: var(--stx-card); border: 1px solid var(--stx-line); border-radius: var(--stx-radius); overflow: hidden; transition: transform .15s ease, box-shadow .15s ease; height: 100%; }
+.stx-catcard:hover { transform: translateY(-3px); box-shadow: var(--stx-shadow-hover); }
+.stx-catcard img { width: 100%; height: 130px; object-fit: cover; display: block; }
+
+/* ---- Product grid: fluid columns from viewport width ---- */
+.stx-grid { display: grid; gap: 18px; grid-template-columns: repeat(auto-fill, minmax(215px, 1fr)); }
+@media (min-width: 1500px) { .stx-grid { grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); } }
+@media (max-width: 575px) { .stx-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; } }
+
+/* ---- Product card ---- */
+.stx-card { background: var(--stx-card); border: 1px solid var(--stx-line); border-radius: var(--stx-radius); overflow: hidden; display: flex; flex-direction: column; height: 100%; transition: transform .15s ease, box-shadow .15s ease; }
+.stx-card:hover { transform: translateY(-3px); box-shadow: var(--stx-shadow-hover); }
+.stx-card:focus-within { outline: 2px solid var(--stx-accent); outline-offset: 2px; }
+.stx-card-img { position: relative; aspect-ratio: 1 / 1; background: #eef1f5; overflow: hidden; }
+.stx-card-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.stx-card-body { padding: 12px 14px 14px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+.stx-card-name { font-weight: 600; font-size: .95rem; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-height: 2.5em; }
+.stx-card-name a { color: var(--stx-ink); text-decoration: none; }
+.stx-card-name a:hover { color: var(--stx-brand); text-decoration: underline; }
+.stx-card-cat { font-size: .78rem; color: var(--stx-muted); text-transform: uppercase; letter-spacing: .4px; }
+.stx-price { font-weight: 700; font-size: 1.05rem; }
+.stx-was { color: var(--stx-muted); text-decoration: line-through; font-size: .85rem; }
+.stx-card-actions { margin-top: auto; display: flex; gap: 8px; padding-top: 6px; }
+.stx-btn-primary { background: var(--stx-brand); border-color: var(--stx-brand); }
+.stx-btn-primary:hover { background: var(--stx-brand-dark); border-color: var(--stx-brand-dark); }
+.stx-btn-accent { background: var(--stx-accent); border-color: var(--stx-accent); color: #fff; }
+.stx-btn-accent:hover { background: var(--stx-accent-dark); border-color: var(--stx-accent-dark); color: #fff; }
+
+/* ---- Toolbar / filters ---- */
+.stx-toolbar { background: var(--stx-card); border: 1px solid var(--stx-line); border-radius: var(--stx-radius); }
+.stx-chip { display: inline-flex; align-items: center; gap: 6px; background: #e8eef5; border-radius: 999px; padding: 3px 6px 3px 12px; font-size: .82rem; }
+.stx-chip button { border: 0; background: transparent; font-weight: 700; color: var(--stx-muted); line-height: 1; }
+.stx-modeswitch .btn.active { background: var(--stx-brand); border-color: var(--stx-brand); color: #fff; }
+
+/* ---- Detail ---- */
+.stx-detail-img { background: #fff; border: 1px solid var(--stx-line); border-radius: var(--stx-radius); overflow: hidden; }
+.stx-detail-img img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; display: block; }
+.stx-crumb { font-size: .85rem; }
+.stx-crumb a { color: var(--stx-brand); text-decoration: none; }
+
+/* ---- Tables ---- */
+.stx-table th { background: var(--stx-brand); color: #fff; font-weight: 600; white-space: nowrap; }
+.stx-table td { vertical-align: middle; }
+.stx-thumb { width: 52px; height: 52px; object-fit: cover; border-radius: 8px; border: 1px solid var(--stx-line); }
+
+/* ---- States ---- */
+.stx-empty { background: var(--stx-card); border: 1px dashed var(--stx-line); border-radius: var(--stx-radius); }
+.stx-skeleton { border-radius: var(--stx-radius); background: linear-gradient(90deg, #e9edf2 25%, #f7f9fc 50%, #e9edf2 75%); background-size: 200% 100%; animation: stx-shimmer 1.2s infinite; min-height: 260px; }
+@keyframes stx-shimmer { to { background-position: -200% 0; } }
+
+/* ---- Footer ---- */
+.stx-footer { background: var(--stx-brand-dark); color: #c9d8e8; }
+.stx-footer a { color: #e8f0f8; text-decoration: none; }
+.stx-footer a:hover { color: #ffd98a; }
+.stx-footer h6 { color: #fff; font-weight: 600; }
+
+/* ---- Admin ---- */
+.stx-statcard { background: var(--stx-card); border: 1px solid var(--stx-line); border-radius: var(--stx-radius); border-top: 4px solid var(--stx-brand); }
+.stx-statcard.warn { border-top-color: var(--stx-accent); }
+.stx-statcard.bad { border-top-color: #c0392b; }
+.stx-preview-img { max-width: 220px; aspect-ratio: 1/1; object-fit: cover; border-radius: 10px; border: 1px solid var(--stx-line); }

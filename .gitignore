@@ -1,0 +1,27 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Secrets — never commit
+.env
+
+# .NET
+bin/
+obj/
+*.user
+.vs/
+TestResults/
+*.trx
+coverage*.xml
+coverage*/
+
+# Node / frontend
+node_modules/
+frontend/dist/
+frontend/test-results/
+frontend/playwright-report/
+frontend/coverage/
+
+# Docker leftovers
+*.log
